@@ -1,0 +1,125 @@
+\documentclass{article}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+\usepackage{amsfonts}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[margin=2.5cm]{geometry}
+
+
+\title{CS229 - Problem Set 0}
+\author{You}
+
+\maketitle
+
+\begin{document}
+
+\section*{Exercise 1}
+\subsection*{(a)}
+
+\begin{align*}
+  \nabla f(x) & = \begin{bmatrix}
+    \frac{\partial}{\partial x_{1}} f(x) \\
+    \frac{\partial}{\partial x_{2}} f(x) \\
+    \vdots                               \\
+    \frac{\partial}{\partial x_{n}} f(x)
+  \end{bmatrix}
+\end{align*}
+
+For $f(x)= \frac{1}{2}x^TAx+b^Tx, A^T=A$, we'll get
+\begin{align*}
+    & \frac{\partial}{\partial x_{k}} f(x)=\frac{\partial}{\partial x_{k}} \Bigg{(}\frac{1}{2}\sum_{i=1}^{n}\sum_{j=1}^{n}x_{i}A_{ij}x_{j} + \frac{1}{2}\sum_{i=1}^{n}x_{i}b_{i}\Bigg{)} = \frac{1}{2}\frac{\partial}{\partial x_{k}}\Bigg{(}\sum_{i\not{=}k}^{n}x_{k}A_{ki}x_{i}+\sum_{j\not{=}k}^{n}x_{j}A_{jk}x_{k}+\frac{1}{2}x_{k}^2 A_{kk} \Bigg{)}+ \\
+    & \frac{\partial}{\partial x_{k}} \sum_{i=1}^{n}x_{i}b_{i}=\frac{\partial}{\partial x_{k}}{\sum_{i=1,i\not{=}k}^{n}x_{k}A_{ik}x_{i}}+A_{kk}+b_{k}=\sum_{i=1}^{n}A_{ik}x_{i}+b_{k}
+\end{align*}
+And we got $\nabla f(x)=Ax+b$
+
+\subsection*{(b)}
+
+By the multivariable chain rule
+\begin{align*}
+  \nabla f(x) = \nabla g(h(x)) = g'(h(x)) \nabla h(x)
+\end{align*}
+
+\subsection*{(c)}
+
+From (a) we got $\frac{\partial}{\partial x_{k}} f(x)= \sum_{i=1}^{n}A_{ik}x_{i} + b_{k}$, so
+\begin{align*}
+  \frac{\partial}{\partial x_{k}x_{t}} f(x)=\frac{\partial}{\partial x_{t}}\Bigg{(}\sum_{i=1}^{n}A_{ik}x_{i} + b_{k}\Bigg{)}=A_{it}
+\end{align*}
+And we got $\nabla^2 f(x)=A$
+
+\subsection*{(d)}
+Let $f(x)=g(a^Tx)$, by (b)
+\begin{align*}
+  \nabla f(x)=g'(a^Tx)
+  \nabla h(x) = \nabla (a^Tx), \frac{\partial}{\partial x_{k}}a^Tx=\frac{\partial}{\partial x_{k}}\sum_{i=1}^{n}a_{i}x_{i}=x_{k}
+\end{align*}
+So $\nabla f(x) = g'(a^Tx)a$
+
+If we'll use the multivariable chain rule on $\nabla f(x)=g'(a^Tx)a$, we'll get $\nabla ^2f(x)=g''(a^Tx)aa^T$.
+And without the first calculation
+
+\begin{align*}
+  \nabla ^2 f(x) = g'(a^T)\nabla^2 (a^Tx)+g''(a^Tx)\nabla (a^Tx) \nabla (a^Tx)^T
+\end{align*}
+
+But $\frac{\partial}{\partial x_{k}x_{t}} a^Tx =
+  \frac{\partial}{\partial x_{t}} a_{k}=0$, thus $\nabla ^2 a^Tx=0$, and by (c) we got $\nabla a^Tx=a$, so
+\begin{align*}
+  \nabla ^2 g(a^Tx)=g''(a^Tx)aa^T
+\end{align*}
+
+\newpage
+
+\section*{Exercise 2}
+
+\subsection*{(a)}
+
+Let $z \in \mathbb{R}^n, A=zz^T$, then $A^T=(zz^T)^T=(z^T)^Tz^T=zz^T=A$, and for $v \in \mathbb{R}^n$ we got $\langle Av,v \rangle=\langle zz^Tv,v\rangle=\langle z^Tv,z^Tv \rangle=\|z^Tv\| \ge 0$, thus by definition $A \succeq 0$
+
+\subsection*{(b)}
+I'll show that $\mathcal{N}(A)=W=\{ v:\langle z,v \rangle =0\}$, indeed, if $\langle z,v \rangle =0$ then $z^Tv=0 \implies Av=0$, so $W \subseteq \mathcal{N}$, also
+\begin{align*}
+  Av=0 \implies \| z^Tv \| = \langle z^Tv, z^Tv\rangle =\langle zz^T,v \rangle =zz^Tv=0
+\end{align*}
+And thus we got $\mathcal{N}=\{ v:\langle z,v \rangle =0\}$.
+\\From the rank-nullity theorem $\dim\text{Im}T=n-\dim \ker T=n-(n-1)\overset{(1)}{=}1$
+
+\subsection*{(c)}
+The statement is true, indeed, if $A\succeq 0$, then $(BAB^T)^T=(B^T)^TA^TB^T=B^TA^B$, and for $v \in \mathbb{R}^n$ we got $\langle B^TABv,v \rangle = \langle ABv,Bv \rangle \ge 0$, while the last claim is true because $A \succeq 0$
+
+\section*{Exercise 3}
+
+\subsection*{(a)}
+
+$A=T\Lambda T^{-1} \implies AT=\Lambda T$, so for each column of $T$, $t^{(i)}$ we have $At^{(i)}=[T\Lambda]^{(i)}$, but
+\begin{align*}
+  [T\Lambda]_{k}^{(i)}=\sum_{j=1}^{n}T_{kj}\Lambda_{ji}=T_{ki}\Lambda_{ii} \implies [T\Lambda]^{(i)}=\Lambda_{ii}t^{(i)}
+\end{align*}
+
+And thus $At^{(i)}=[T\Lambda]^{(i)}\overset{(2)}{=}\lambda_{i}t^{(i)}$
+
+
+\subsection*{(b)}
+
+By the definition of orthogonal matrix, if $U$ is orthogonal then $U^T=U^{-1}$, so $A=U\Lambda U^{-1}$ and the claim is true from (a)
+
+\subsection*{(c)}
+
+Suppose $A \succeq 0$ and suppose that $u^{(i)}$ is an eigenvector of $A$ with eigenvalue $\lambda_{i}$, then
+\begin{align*}
+  0 \le \langle Au^{(i)},u^{(i)} \rangle = \langle \lambda_{i}u^{(i)},u^{(i)} \rangle = \lambda_i \langle u^{(i)}, u^{(i)} \rangle = \lambda \|u^{(i)} \|
+\end{align*}
+So because $\| u^{(i)} \| \ge 0$ we got $\lambda_i \ge 0$
+
+
+\end{document}
